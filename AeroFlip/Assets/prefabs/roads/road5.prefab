@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6939722687527184250}
+  - component: {fileID: -299419905094350403}
   m_Layer: 0
   m_Name: road5
   m_TagString: Untagged
@@ -38,6 +39,19 @@ Transform:
   - {fileID: 4713037200949299886}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-299419905094350403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 197110800400862252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1ee2553b35516a429c0ff1b892fda3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WorldMovement
+  worldSpeed: 60
 --- !u!1 &1010755363849344421
 GameObject:
   m_ObjectHideFlags: 0
