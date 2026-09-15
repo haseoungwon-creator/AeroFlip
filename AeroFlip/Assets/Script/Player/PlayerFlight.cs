@@ -85,7 +85,7 @@ public class PlayerFlight : MonoBehaviour
         if (clickHeld)
             moveMultiplier = clickMoveMultiplier;
 
-        Vector3 movement = right * currentInput.x + up * currentInput.y * verticalMultiplier;
+        Vector3 movement = right * currentInput.x * verticalMultiplier + up * currentInput.y * verticalMultiplier;
         targetPosition += movement * moveSpeed * moveMultiplier * Time.deltaTime;
 
         targetPosition.x = Mathf.Clamp(targetPosition.x, minX, maxX);

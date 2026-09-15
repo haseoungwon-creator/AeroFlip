@@ -7,18 +7,13 @@ public class CameraFollow : MonoBehaviour
 
     [Header("Position")]
     [SerializeField] private Vector3 offset = new Vector3(0f, 8f, -25f);
-    [SerializeField] private float positionSmooth = 15f;
+    [SerializeField] private float followSpeed = 12f;
 
-    [Header("Rotation Follow")]
-    [SerializeField] private float rotationSmoothTime = 0.35f;
-    [SerializeField] private float maxRoll = 15f;
-    [SerializeField] private float maxPitch = 8f;
+    [Header("Vertical Follow")]
+    [SerializeField] private float verticalFollowSpeed = 18f;
 
-    private Vector3 positionVelocity;
-    private float currentPitch;
-    private float currentRoll;
-    private float pitchVelocity;
-    private float rollVelocity;
+    [Header("Rotation")]
+    [SerializeField] private float rotationSpeed = 5f;
 
     private void LateUpdate()
     {
@@ -32,17 +27,32 @@ public class CameraFollow : MonoBehaviour
     private void FollowPosition()
     {
         Vector3 targetPosition = target.position + offset;
-        transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref positionVelocity, 1f / positionSmooth);
+
+        float x = Mathf.Lerp(
+            transform.position.x,
+            targetPosition.x,
+            followSpeed * Time.deltaTime
+        );
+
+        float y = Mathf.Lerp(
+            transform.position.y,
+            targetPosition.y,
+            verticalFollowSpeed * Time.deltaTime
+        );
+
+        float z = targetPosition.z;
+
+        transform.position = new Vector3(x, y, z);
     }
 
     private void FollowRotation()
     {
-        float targetPitch = Mathf.Clamp(Mathf.DeltaAngle(0f, target.eulerAngles.x), -maxPitch, maxPitch);
-        float targetRoll = Mathf.Clamp(Mathf.DeltaAngle(0f, target.eulerAngles.z), -maxRoll, maxRoll);
+        Quaternion targetRotation = Quaternion.identity;
 
-        currentPitch = Mathf.SmoothDampAngle(currentPitch, targetPitch, ref pitchVelocity, rotationSmoothTime);
-        currentRoll = Mathf.SmoothDampAngle(currentRoll, targetRoll, ref rollVelocity, rotationSmoothTime);
-
-        transform.rotation = Quaternion.Euler(currentPitch, 0f, currentRoll);
+        transform.rotation = Quaternion.Slerp(
+            transform.rotation,
+            targetRotation,
+            rotationSpeed * Time.deltaTime
+        );
     }
 }
