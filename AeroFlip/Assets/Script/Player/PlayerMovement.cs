@@ -16,7 +16,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float maxY = 50f;
 
     [SerializeField] float maxPitch = 20f;
-    [SerializeField] float maxRoll = 35f;
+    [SerializeField] float maxRoll = 18f;
     [SerializeField] float clickMaxRoll = 200f;
     [SerializeField] float pitchRotationSmooth = 25f;
     [SerializeField] float rollRotationSmooth = 8f;

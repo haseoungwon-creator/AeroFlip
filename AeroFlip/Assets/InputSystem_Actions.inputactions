@@ -1004,6 +1004,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Move1",
+                    "type": "Button",
+                    "id": "02337f62-dcf9-40ba-ae87-b86feeed7e3b",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -1011,6 +1020,45 @@
                     "name": "",
                     "id": "4145ed79-ddfd-4a1b-9c69-8acee06b5d24",
                     "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "18a579ea-a2c7-4c13-8368-de9867e81bea",
+                    "path": "<Keyboard>/anyKey",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Player2D",
+            "id": "5f888f7c-3d4b-4444-a253-280532a6092e",
+            "actions": [
+                {
+                    "name": "Move",
+                    "type": "Button",
+                    "id": "5af13c01-4eca-434b-971b-3cb9cc23e58c",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "922f5554-205e-42db-960b-711a613e35ef",
+                    "path": "<Keyboard>/anyKey",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

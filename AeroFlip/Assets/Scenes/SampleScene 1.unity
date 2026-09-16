@@ -224,7 +224,7 @@ MonoBehaviour:
   - {fileID: 8888267628204532281, guid: 1c3e91a85eecd874fbfa9fb2b9a88c9b, type: 3}
   - {fileID: 6573022208643476565, guid: e3840db146db7df409fedb4be26e04e0, type: 3}
   player: {fileID: 488011501}
-  mapLength: 78
+  mapLength: 75
   forwardMapCount: 6
   safeMapCount: 6
   worldSpeed: 30
@@ -522,13 +522,13 @@ GameObject:
   - component: {fileID: 488011501}
   - component: {fileID: 488011500}
   - component: {fileID: 488011499}
-  - component: {fileID: 488011497}
   - component: {fileID: 488011503}
   - component: {fileID: 488011502}
+  - component: {fileID: 488011508}
+  - component: {fileID: 488011507}
   - component: {fileID: 488011506}
   - component: {fileID: 488011505}
   - component: {fileID: 488011504}
-  - component: {fileID: 488011507}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -536,32 +536,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &488011497
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 488011496}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 261fde23cc0f8b34eaf843a83caed338, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerFlight
-  moveSpeed: 25
-  verticalMultiplier: 2
-  moveSmooth: 15
-  clickMoveMultiplier: 0.2
-  minX: -40
-  maxX: 40
-  minY: -5
-  maxY: 50
-  maxPitch: 25
-  maxRoll: 35
-  clickMaxRoll: 120
-  rotationSmooth: 8
-  inputSensitivity: 1.5
-  inputSmooth: 8
 --- !u!114 &488011499
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -686,25 +660,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 488011496}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 77e9d669c3e45a842bb0c31ad5ecba24, type: 3}
+  m_Script: {fileID: 11500000, guid: 251e3bc784ecc214fa834da4c18fdff1, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayrMovent
-  playerMode: {fileID: 488011505}
-  moveSpeed: 25
-  verticalMultiplier: 2
-  moveSmooth: 15
-  clickMoveMultiplier: 0.2
-  minX: -40
-  maxX: 40
-  minY: 0
-  maxY: 50
-  maxPitch: 20
-  maxRoll: 18
-  clickMaxRoll: 200
-  pitchRotationSmooth: 25
-  rollRotationSmooth: 8
-  inputSensitivity: 1.5
-  inputSmooth: 8
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerMode
+  currentMode: 0
 --- !u!114 &488011505
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -714,22 +673,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 488011496}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 251e3bc784ecc214fa834da4c18fdff1, type: 3}
+  m_Script: {fileID: 11500000, guid: df5262926a622be4cbae3e34a2496066, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerMode
-  currentMode: 0
---- !u!114 &488011506
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 488011496}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33755c3673bd7064f8399519153de54c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerController
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement3D1
+  input: {fileID: 488011508}
+  playerMode: {fileID: 488011504}
   moveSpeed: 25
   verticalMultiplier: 2
   moveSmooth: 15
@@ -745,6 +693,28 @@ MonoBehaviour:
   rollRotationSmooth: 8
   inputSensitivity: 1.5
   inputSmooth: 8
+--- !u!114 &488011506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 488011496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d6308d76da04644ca503bfcf59895ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement2D1
+  input: {fileID: 488011508}
+  playerMode: {fileID: 488011504}
+  moveSpeed: 25
+  moveSmooth: 15
+  inputSmooth: 8
+  rotationSmooth: 8
+  minX: -40
+  maxX: 40
+  minY: 0
+  maxY: 50
 --- !u!114 &488011507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -754,16 +724,34 @@ MonoBehaviour:
   m_GameObject: {fileID: 488011496}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98ee0261a01e21344a9cf61f3e2b2c77, type: 3}
+  m_Script: {fileID: 11500000, guid: 7d0d31192955c8748b8a0b314902a68a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement2D
-  playerMode: {fileID: 488011505}
-  moveSpeed: 25
-  moveSmooth: 15
-  minX: -40
-  maxX: 40
-  minY: 0
-  maxY: 50
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerModeController
+  input: {fileID: 488011508}
+  playerMode: {fileID: 488011504}
+  shiftCooldown: 5
+  wallSpawnDelay: 0.3
+  dodgeWindowUp: 1.2
+  cloudTransitionDurationUp: 1.5
+  safeZoneCountUp: 3
+  mode2DAutoReturnTime: 15
+  missileWarningLeadTime: 1.5
+  dodgeWindowDown: 1.2
+  cloudTransitionDurationDown: 1.5
+  safeZoneCountDown: 6
+  postLandingSafeDuration: 2.5
+--- !u!114 &488011508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 488011496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd0ab028dd7c3b34e89b2c686bef981e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInputHandler
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
