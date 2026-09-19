@@ -5,7 +5,6 @@ public enum PlayerModes
     Mode3D,
     Mode2D
 }
-
 public class PlayerMode : MonoBehaviour
 {
     [SerializeField] PlayerModes currentMode = PlayerModes.Mode3D;
@@ -27,7 +26,7 @@ public class PlayerMode : MonoBehaviour
         return currentMode == PlayerModes.Mode3D;
     }
 
-    public bool Is2D()
+    public bool IsMode2D()
     {
         return currentMode == PlayerModes.Mode2D;
     }

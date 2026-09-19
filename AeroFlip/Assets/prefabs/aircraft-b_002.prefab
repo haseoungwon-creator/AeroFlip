@@ -102,7 +102,6 @@ GameObject:
   - component: {fileID: 1525602769726878076}
   - component: {fileID: 1841745659892569157}
   - component: {fileID: 389452379511339745}
-  - component: {fileID: 6412941030195645706}
   m_Layer: 0
   m_Name: aircraft-roter_001
   m_TagString: Untagged
@@ -182,16 +181,3 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &6412941030195645706
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8234775977511302092}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7eb24297e85c1cb468e5ed741c3e8911, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PropellerRotate
-  rotationSpeed: 1500

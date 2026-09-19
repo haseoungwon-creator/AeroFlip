@@ -1,90 +1,121 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MapManager : MonoBehaviour
 {
-    [SerializeField] GameObject safeMapPrefab;
-    [SerializeField] GameObject[] mapPrefabs;
+    [SerializeField] MapPool mapPool;
     [SerializeField] Transform player;
     [SerializeField] float mapLength = 80f;
     [SerializeField] int forwardMapCount = 6;
     [SerializeField] int safeMapCount = 3;
     [SerializeField] float worldSpeed = 30f;
-    [SerializeField] float keepBehindDistance = 250f;
-    readonly Queue<GameObject> spawnedMaps = new Queue<GameObject>();
-    GameObject farthestMap;
+    [SerializeField] float keepBegindDistance = 250f;
+
+    private readonly Queue<SpawnedMap> spawnedMaps = new Queue<SpawnedMap>();
+    private GameObject farthestMap;
     int mapCount;
 
-    void Update()
+    private struct SpawnedMap
+    {
+        public GameObject map;
+        public int mapIndex;
+        public bool isSafe;
+
+        public SpawnedMap(GameObject map,int mapIndex,bool isSafe)
+        {
+            this.map = map;
+            this.mapIndex = mapIndex;
+            this.isSafe = isSafe;
+        }
+    }
+
+    private void Update()
     {
         SpawnMapsAhead();
         RemoveMapsBehind();
     }
 
-    void SpawnMapsAhead()
+
+    private void SpawnMapsAhead()
     {
         float requiredZ = player.position.z + mapLength * forwardMapCount;
-        float farthestZ = GetFarthestZ();
+        float forthestZ = GerFarthestZ();
         int guard = 0;
-        while (farthestZ < requiredZ)
+
+        while (forthestZ < requiredZ)
         {
-            float spawnZ = farthestZ + mapLength;
+            float spawnZ = forthestZ + mapLength;
             if (!SpawnMap(spawnZ))
                 break;
-            farthestZ = spawnZ;
+
+            forthestZ = spawnZ;
+
             if (++guard > 2000)
                 break;
         }
     }
 
-    float GetFarthestZ()
+    private float GerFarthestZ()
     {
         return farthestMap != null ? farthestMap.transform.position.z : player.position.z - mapLength;
     }
 
-    bool SpawnMap(float spawnZ)
+    private bool SpawnMap(float spawnZ)
     {
         bool isSafe = mapCount < safeMapCount;
-        GameObject prefab = isSafe ? safeMapPrefab : GetRandomPrefab();
-        if (prefab == null)
+        int mapIndex = isSafe ? -1 : Random.Range(0, mapPool.MapPrefabsCount);
+        GameObject map = isSafe ? mapPool.GetSafeMap() : mapPool.GetMap(mapIndex);
+
+        if(map == null)
             return false;
+
         Quaternion rotation = Quaternion.identity;
+
         if (!isSafe)
         {
             int rotationY = Random.Range(0, 2) == 0 ? 0 : 180;
-            rotation = Quaternion.Euler(0f, rotationY, 0f);
+            rotation = Quaternion.Euler(0f,rotationY, 0f);
         }
-        GameObject map = Instantiate(prefab, new Vector3(0f, 0f, spawnZ), rotation, transform);
-        spawnedMaps.Enqueue(map);
+
+        map.transform.SetPositionAndRotation(new Vector3(0f, 0f, spawnZ), rotation);
+
+        spawnedMaps.Enqueue(new SpawnedMap(map,mapIndex, isSafe));
         farthestMap = map;
         mapCount++;
+
         return true;
     }
 
-    GameObject GetRandomPrefab()
+    private void RemoveMapsBehind()
     {
-        if (mapPrefabs == null || mapPrefabs.Length == 0)
-            return null;
-        return mapPrefabs[Random.Range(0, mapPrefabs.Length)];
-    }
+        float deleteZ = player.position.z - keepBegindDistance;
 
-    void RemoveMapsBehind()
-    {
-        float deleteZ = player.position.z - keepBehindDistance;
-        while (spawnedMaps.Count > 0)
+        while(spawnedMaps.Count > 0)
         {
-            GameObject map = spawnedMaps.Peek();
-            if (map == null)
+            SpawnedMap spawnedMap = spawnedMaps.Peek();
+            GameObject map = spawnedMap.map;
+
+            if(map == null)
             {
                 spawnedMaps.Dequeue();
                 continue;
             }
+
             float frontEdge = map.transform.position.z + mapLength * 0.5f;
+
             if (frontEdge >= deleteZ)
                 break;
+
             if (map == farthestMap)
                 farthestMap = null;
-            Destroy(map);
+
+            if (spawnedMap.isSafe)
+                mapPool.ReturnSafeMap(map);
+
+            else
+                mapPool.ReturnMap(spawnedMap.mapIndex,map);
+
             spawnedMaps.Dequeue();
         }
     }
