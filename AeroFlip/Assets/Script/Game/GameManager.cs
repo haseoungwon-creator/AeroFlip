@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
     [SerializeField] WorldMovement worldMoveMent;
     [SerializeField] ScoreManager scoreManager;
+    [SerializeField] MissileSpawner missileSpawner;
     public GameStates CurrentState {  get; private set; }
 
     private void Awake()
@@ -50,6 +51,7 @@ public class GameManager : MonoBehaviour
                 worldMoveMent.ResetPosition();
                 scoreManager.StopScoring();
                 scoreManager.ResetScore();
+                missileSpawner.SetSpawning(false);
                 break;
             case GameStates.Playing:
                 worldMoveMent.SetMovement(true);
@@ -58,6 +60,7 @@ public class GameManager : MonoBehaviour
             case GameStates.GameOver:
                 worldMoveMent.SetMovement(false);
                 scoreManager.StopScoring();
+                missileSpawner.SetSpawning(false);
                 worldMoveMent.ResetPosition();
                 scoreManager.SaveHighScore();
                 break;

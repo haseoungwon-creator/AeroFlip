@@ -119,4 +119,22 @@ public class MapManager : MonoBehaviour
             spawnedMaps.Dequeue();
         }
     }
+
+    public void ResetMaps()
+    {
+        while (spawnedMaps.Count > 0)
+        {
+            SpawnedMap spawnedMap = spawnedMaps.Dequeue();
+
+            if (spawnedMap.map == null)
+                continue;
+
+            if (spawnedMap.isSafe)
+                mapPool.ReturnSafeMap(spawnedMap.map);
+            else
+                mapPool.ReturnMap(spawnedMap.mapIndex,spawnedMap.map);
+        }
+        farthestMap = null;
+        mapCount = 0;
+    }
 }
