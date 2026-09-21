@@ -1,0 +1,64 @@
+using NUnit.Framework.Internal.Commands;
+using UnityEngine;
+
+public class CameraController : MonoBehaviour
+{
+    [SerializeField] Transform player;
+    [SerializeField] Vector3 cameraOffset3D = new Vector3(0, 8, -12);
+    [SerializeField] Vector3 cameraRotation3D = new Vector3(20, 0, 0);
+    [SerializeField] Vector3 cameraOffset2D = new Vector3(0, 90, 0);
+    [SerializeField] Vector3 cameraRotation2D = new Vector3(90, 0, 0);
+
+    private bool is2D;
+    private bool isTransitioning;
+    private void LateUpdate()
+    {
+        if (player == null || isTransitioning) return;
+
+        if (is2D)
+            Update2DCamera();
+        else
+            Update3DCamera();
+    }
+
+    public void SetTransitioning(bool value)
+    {
+        isTransitioning = value;
+    }
+
+    public void Set3DView()
+    {
+        is2D = false;
+        Apply3DView();
+    }
+
+    public void Set2DView()
+    {
+        is2D=true;
+        Apply2DView();
+    }
+
+    private void Update3DCamera()
+    {
+        transform.position = player.position + cameraOffset3D;
+        transform.rotation = Quaternion.Euler(cameraRotation3D);
+    }
+
+    private void Update2DCamera()
+    {
+        transform.position = player.position + cameraOffset2D;
+        transform.rotation = Quaternion.Euler(cameraRotation2D);
+    }
+
+    private void Apply3DView()
+    {
+        transform.position = player.position + cameraOffset3D;
+        transform.rotation = Quaternion.Euler(cameraRotation3D);
+    }
+
+    private void Apply2DView()
+    {
+        transform.position = player.position + cameraOffset2D;
+        transform.rotation = Quaternion.Euler(cameraRotation2D);
+    }
+}
