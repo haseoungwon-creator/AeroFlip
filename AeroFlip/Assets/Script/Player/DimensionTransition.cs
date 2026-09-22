@@ -7,13 +7,11 @@ public class DimensionTransition : MonoBehaviour
     [SerializeField] PlayerTransitionMovement transitionMovement;
     [SerializeField] CameraController cameraController;
     [SerializeField] PlayerMode playerMode;
-    [SerializeField] WallPool wallPool;
     [SerializeField] ScoreManager scoreManager;
-
-    [SerializeField] float wallDistance = 30f;
+    [SerializeField] MapManager mapManager;
 
     private bool isTransitioning;
-    private GameObject currentWall;
+    private float transitionMapEndZ;
 
     public bool IsTransitioning => isTransitioning;
 
@@ -27,47 +25,34 @@ public class DimensionTransition : MonoBehaviour
     private IEnumerator TransitionTo2DSequence()
     {
         isTransitioning = true;
-        playerController.SetControlEnabled(false);
-        scoreManager.StopScoring();
         cameraController.SetTransitioning(true);
+
+        transitionMapEndZ = mapManager.SpawnTransitionSafeMaps();
+
+        yield return WaitForTransitionMap();
 
         yield return transitionMovement.MoveToCenter();
 
-        SpawnWall();
 
+        scoreManager.StopScoring();
         yield return transitionMovement.Rise();
 
         cameraController.Set2DView();
         playerMode.SetMode(PlayerModes.Mode2D);
+        playerController.Set3DInput();
 
-        ReturnWall();
 
-        cameraController.Set2DView();
         cameraController.SetTransitioning(false);
-        playerMode.SetMode(PlayerModes.Mode2D);
-        ReturnWall();
-
         scoreManager.StartScoring();
         playerController.SetControlEnabled(true);
         isTransitioning = false;
     }
 
-    private void SpawnWall()
+    private IEnumerator WaitForTransitionMap()
     {
-        if (wallPool == null) return;
+        while(!mapManager.IsTransitionMapArrived(transitionMapEndZ))
+            yield return null;
 
-        currentWall = wallPool.GetWall();
-
-        if(currentWall == null) return;
-
-        currentWall.transform.position = transform.position + Vector3.forward * wallDistance;
-    }
-
-    private void ReturnWall()
-    {
-        if(currentWall == null) return;
-
-        wallPool.ReturnWall();
-        currentWall = null;
+        playerController.SetControlEnabled(false);
     }
 }

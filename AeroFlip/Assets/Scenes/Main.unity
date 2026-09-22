@@ -568,12 +568,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapManager
   mapPool: {fileID: 774914388}
+  wallPool: {fileID: 774914385}
   player: {fileID: 6349540993517378987}
   mapLength: 80
   forwardMapCount: 6
   safeMapCount: 3
   worldSpeed: 30
   keepBegindDistance: 250
+  worldMovement: {fileID: 774914384}
+  wallDistance: 30
 --- !u!4 &774914390
 Transform:
   m_ObjectHideFlags: 0
@@ -671,9 +674,8 @@ MonoBehaviour:
   transitionMovement: {fileID: 6349540993517378989}
   cameraController: {fileID: 330585548}
   playerMode: {fileID: 6349540993517378988}
-  wallPool: {fileID: 774914385}
   scoreManager: {fileID: 1397169578}
-  wallDistance: 30
+  mapManager: {fileID: 774914389}
 --- !u!4 &1187783837
 Transform:
   m_ObjectHideFlags: 0
@@ -732,6 +734,52 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2136318220
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2136318222}
+  - component: {fileID: 2136318221}
+  m_Layer: 0
+  m_Name: PerformanceMonitor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2136318221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2136318220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: def595e30b1c2604493febcd7dbb8104, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PerformanceMonitor
+  showMonitor: 1
+  targetFrameRate: 60
+--- !u!4 &2136318222
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2136318220}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 45.592064, y: -0.000000850152, z: -44.78895}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -931,7 +979,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerTransitionMovement
   centerMoveDuration: 1
-  transitionHeight: 30
+  transitionHeight: 100
   transitionDuration: 1.5
   riseRotationX: -70
   diveRotationX: 70
@@ -949,6 +997,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   playerMode: {fileID: 6349540993517378988}
   dimensionTransition: {fileID: 1187783836}
+  playerInput: {fileID: 6349540993517378992}
 --- !u!114 &6349540993517378991
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -956,7 +1005,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4671372671951975989}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 07e076d3a20fdb84ead87a39a6527183, type: 3}
   m_Name: 
@@ -965,9 +1014,8 @@ MonoBehaviour:
   transitionMovement: {fileID: 6349540993517378989}
   cameraController: {fileID: 330585548}
   playerMode: {fileID: 6349540993517378988}
-  wallPool: {fileID: 774914385}
   scoreManager: {fileID: 1397169578}
-  wallDistance: 30
+  mapManager: {fileID: 774914389}
 --- !u!114 &6349540993517378992
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -981,7 +1029,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.PlayerInput
   m_Actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  m_NotificationBehavior: 0
+  m_NotificationBehavior: 2
   m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:
     m_PersistentCalls:
@@ -992,10 +1040,34 @@ MonoBehaviour:
   m_ControlsChangedEvent:
     m_PersistentCalls:
       m_Calls: []
-  m_ActionEvents: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: b7a0e447-42c8-4ffd-82fb-9fb364f834bc
+    m_ActionName: 'Player3D/Mouse[/Mouse/position,/Mouse/delta]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 5af13c01-4eca-434b-971b-3cb9cc23e58c
+    m_ActionName: 'Player2D/Move[/Keyboard/anyKey]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6349540993517378990}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnShift
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 7aa857ec-2d52-4b1e-b65f-c40f68a7b410
+    m_ActionName: 'System/Shift[/Keyboard/leftShift]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: df70fa95-8a34-4494-b137-73ab6b9c7d37
+  m_DefaultActionMap: Player3D
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!1 &8234775977706158400
@@ -1028,3 +1100,4 @@ SceneRoots:
   - {fileID: 774914390}
   - {fileID: 1187783837}
   - {fileID: 1397169579}
+  - {fileID: 2136318222}

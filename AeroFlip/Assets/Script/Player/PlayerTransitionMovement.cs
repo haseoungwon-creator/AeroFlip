@@ -15,6 +15,9 @@ public class PlayerTransitionMovement : MonoBehaviour
         Vector3 startPosition = transform.position;
         Vector3 targetPosition = Vector3.zero;
 
+        Quaternion startRotation = transform.rotation;
+        Quaternion targetRotation = Quaternion.Euler(0,0,0);
+
         float elapsedTime = 0f;
 
         while (elapsedTime < centerMoveDuration)
@@ -23,11 +26,13 @@ public class PlayerTransitionMovement : MonoBehaviour
             float t = elapsedTime / centerMoveDuration;
             t = Mathf.SmoothStep(0, 1, t);
 
+            transform.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
             transform.position = Vector3.Lerp(startPosition, targetPosition, t);
 
             yield return null;
         }
         transform.position = targetPosition;
+        transform.rotation = targetRotation;
     }
 
     public IEnumerator Rise()

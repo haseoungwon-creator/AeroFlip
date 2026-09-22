@@ -5,12 +5,21 @@ using UnityEngine;
 public class MapManager : MonoBehaviour
 {
     [SerializeField] MapPool mapPool;
+    [SerializeField] WallPool wallPool;
     [SerializeField] Transform player;
     [SerializeField] float mapLength = 80f;
     [SerializeField] int forwardMapCount = 6;
     [SerializeField] int safeMapCount = 3;
     [SerializeField] float worldSpeed = 30f;
     [SerializeField] float keepBegindDistance = 250f;
+    [SerializeField] WorldMovement worldMovement;
+    [SerializeField] float wallDistance = 30f;
+
+
+    private float transitionWallZ;
+    private float transitionMapEndZ;
+    private bool isTransitionMapActive;
+
 
     private readonly Queue<SpawnedMap> spawnedMaps = new Queue<SpawnedMap>();
     private GameObject farthestMap;
@@ -30,9 +39,17 @@ public class MapManager : MonoBehaviour
         }
     }
 
+    public bool IsTransitionMapArrived(float transitionMapEndZ)
+    {
+        float currentEndZ = transitionMapEndZ + worldMovement.transform.position.z;
+        return currentEndZ <= player.position.z;
+    }
+
     private void Update()
     {
-        SpawnMapsAhead();
+        if(!isTransitionMapActive)
+            SpawnMapsAhead();
+        
         RemoveMapsBehind();
     }
 
@@ -40,7 +57,7 @@ public class MapManager : MonoBehaviour
     private void SpawnMapsAhead()
     {
         float requiredZ = player.position.z + mapLength * forwardMapCount;
-        float forthestZ = GerFarthestZ();
+        float forthestZ = Mathf.Max(GetFarthestZ(), transitionWallZ);
         int guard = 0;
 
         while (forthestZ < requiredZ)
@@ -56,7 +73,7 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    private float GerFarthestZ()
+    private float GetFarthestZ()
     {
         return farthestMap != null ? farthestMap.transform.position.z : player.position.z - mapLength;
     }
@@ -136,5 +153,62 @@ public class MapManager : MonoBehaviour
         }
         farthestMap = null;
         mapCount = 0;
+    }
+
+    private bool SpawnSafeMap(float spawnZ)
+    {
+        GameObject map = mapPool.GetSafeMap();
+        if(map == null)
+            return false;
+
+        map.transform.SetPositionAndRotation(
+            new Vector3(0,0,spawnZ),Quaternion.identity);
+
+        spawnedMaps.Enqueue(new SpawnedMap(map, -1, true));
+        farthestMap = map;
+        mapCount++;
+
+        return true;
+    }
+
+    public float SpawnTransitionSafeMaps()
+    {
+        isTransitionMapActive = true;
+
+        float farthestz = GetFarthestZ();
+
+        for(int i = 0; i < 1; i++)
+        {
+            float spawnZ = farthestz + mapLength;
+
+            if (!SpawnSafeMap(spawnZ)) break;
+
+            farthestz = spawnZ;
+        }
+
+        transitionMapEndZ = farthestz + mapLength * 0.5f;
+        transitionWallZ = transitionMapEndZ + wallDistance;
+        SpawnWall(transitionWallZ);
+        return transitionMapEndZ;
+    }
+
+    public void EndTransitionMap()
+    {
+        isTransitionMapActive = false;
+        transitionMapEndZ = 0f;
+        transitionWallZ = 0f;
+    }
+
+    
+    private GameObject SpawnWall(float spawnZ)
+    {
+        GameObject wall = wallPool.GetWall();
+
+        if(wall == null) return null;
+
+        wall.transform.SetPositionAndRotation(
+            new Vector3(0f,0f,spawnZ),Quaternion.identity);
+
+        return wall;
     }
 }
