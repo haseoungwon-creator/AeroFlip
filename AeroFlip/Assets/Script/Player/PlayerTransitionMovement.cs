@@ -2,38 +2,12 @@ using UnityEngine;
 using System.Collections;
 public class PlayerTransitionMovement : MonoBehaviour
 {
-    [SerializeField] float centerMoveDuration = 1f;
-    [SerializeField] float transitionHeight = 30f;
+    [SerializeField] float transitionHeight = 150f;
     [SerializeField] float transitionDuration = 1.5f;
     [SerializeField] float riseRotationX = -70f;
     [SerializeField] float diveRotationX = 70f;
 
     public bool Istransitioning {  get; private set; }
-
-    public IEnumerator MoveToCenter()
-    {
-        Vector3 startPosition = transform.position;
-        Vector3 targetPosition = Vector3.zero;
-
-        Quaternion startRotation = transform.rotation;
-        Quaternion targetRotation = Quaternion.Euler(0,0,0);
-
-        float elapsedTime = 0f;
-
-        while (elapsedTime < centerMoveDuration)
-        {
-            elapsedTime += Time.deltaTime;
-            float t = elapsedTime / centerMoveDuration;
-            t = Mathf.SmoothStep(0, 1, t);
-
-            transform.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
-            transform.position = Vector3.Lerp(startPosition, targetPosition, t);
-
-            yield return null;
-        }
-        transform.position = targetPosition;
-        transform.rotation = targetRotation;
-    }
 
     public IEnumerator Rise()
     {
@@ -51,7 +25,7 @@ public class PlayerTransitionMovement : MonoBehaviour
             elapsedTime += Time.deltaTime;
 
             float t = elapsedTime / transitionDuration;
-            t= Mathf.SmoothStep(0, 1,t);
+            t= Mathf.SmoothStep(0f, 1f,t);
 
             transform.position = Vector3.Lerp(startPosition,targetPosition, t);
             transform.rotation = Quaternion.Slerp(startRotation,targetRotation, t);
@@ -59,8 +33,8 @@ public class PlayerTransitionMovement : MonoBehaviour
             yield return null;
         }
 
-        transform.position = targetPosition;
-        transform.rotation = targetRotation;
+        transform.position = new Vector3(0,10,0);
+        transform.rotation = Quaternion.Euler(0,0,0);
 
         Istransitioning = false;
     }
@@ -94,5 +68,10 @@ public class PlayerTransitionMovement : MonoBehaviour
         transform.rotation = targetRotation;
 
         Istransitioning = false;
+    }
+    
+    public void SetPlayer()
+    {
+        transform.position = new Vector3(0,10,0);
     }
 }

@@ -1,5 +1,4 @@
-using System.Collections.Generic;
-using Unity.VisualScripting;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class MapManager : MonoBehaviour
@@ -23,8 +22,10 @@ public class MapManager : MonoBehaviour
 
     private readonly Queue<SpawnedMap> spawnedMaps = new Queue<SpawnedMap>();
     private GameObject farthestMap;
+    private GameObject transitionSafeMap;
     int mapCount;
 
+    private bool is3DMapActive = true;
     private struct SpawnedMap
     {
         public GameObject map;
@@ -41,12 +42,15 @@ public class MapManager : MonoBehaviour
 
     public bool IsTransitionMapArrived(float transitionMapEndZ)
     {
-        float currentEndZ = transitionMapEndZ + worldMovement.transform.position.z;
+        if (transitionSafeMap == null) return false;
+
+        float currentEndZ = transitionSafeMap.transform.position.z - mapLength * 0.5f;
         return currentEndZ <= player.position.z;
     }
 
     private void Update()
     {
+        if (!is3DMapActive) return;
         if(!isTransitionMapActive)
             SpawnMapsAhead();
         
@@ -149,10 +153,28 @@ public class MapManager : MonoBehaviour
             if (spawnedMap.isSafe)
                 mapPool.ReturnSafeMap(spawnedMap.map);
             else
-                mapPool.ReturnMap(spawnedMap.mapIndex,spawnedMap.map);
+                mapPool.ReturnMap(spawnedMap.mapIndex, spawnedMap.map);
         }
+
+        wallPool.ReturnWall();
+
+        transitionSafeMap = null;
         farthestMap = null;
         mapCount = 0;
+        transitionWallZ = 0f;
+    }
+
+    public void HideMaps()
+    {
+        is3DMapActive = false;
+        foreach(SpawnedMap spawnedmap in spawnedMaps)
+        {
+            if(spawnedmap.map == null) continue;
+
+            spawnedmap.map.SetActive(false);
+        }
+
+        wallPool.ReturnWall();
     }
 
     private bool SpawnSafeMap(float spawnZ)
@@ -171,32 +193,29 @@ public class MapManager : MonoBehaviour
         return true;
     }
 
-    public float SpawnTransitionSafeMaps()
+    public void SpawnTransitionSafeMaps()
     {
         isTransitionMapActive = true;
 
         float farthestz = GetFarthestZ();
+        float spawnZ = farthestz + mapLength;
 
-        for(int i = 0; i < 1; i++)
-        {
-            float spawnZ = farthestz + mapLength;
+        if (!SpawnSafeMap(spawnZ))
+            return;
 
-            if (!SpawnSafeMap(spawnZ)) break;
+        transitionSafeMap = farthestMap;
 
-            farthestz = spawnZ;
-        }
-
-        transitionMapEndZ = farthestz + mapLength * 0.5f;
+        float transitionMapEndZ = transitionSafeMap.transform.position.z + mapLength * 0.5f;
         transitionWallZ = transitionMapEndZ + wallDistance;
+
         SpawnWall(transitionWallZ);
-        return transitionMapEndZ;
     }
 
     public void EndTransitionMap()
     {
         isTransitionMapActive = false;
-        transitionMapEndZ = 0f;
         transitionWallZ = 0f;
+        transitionSafeMap = null;
     }
 
     

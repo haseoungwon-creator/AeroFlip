@@ -1,4 +1,3 @@
-using NUnit.Framework.Internal.Commands;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour
@@ -10,10 +9,16 @@ public class CameraController : MonoBehaviour
     [SerializeField] Vector3 cameraRotation2D = new Vector3(90, 0, 0);
 
     private bool is2D;
-    private bool isTransitioning;
+    private bool isCameraLocked;
     private void LateUpdate()
     {
-        if (player == null || isTransitioning) return;
+        if (player == null) return;
+
+        if (isCameraLocked)
+        {
+            FollowPlayer();
+            return;
+        }
 
         if (is2D)
             Update2DCamera();
@@ -21,20 +26,17 @@ public class CameraController : MonoBehaviour
             Update3DCamera();
     }
 
-    public void SetTransitioning(bool value)
-    {
-        isTransitioning = value;
-    }
-
     public void Set3DView()
     {
         is2D = false;
+        isCameraLocked = false;
         Apply3DView();
     }
 
     public void Set2DView()
     {
         is2D=true;
+        isCameraLocked = false;
         Apply2DView();
     }
 
@@ -48,6 +50,16 @@ public class CameraController : MonoBehaviour
     {
         transform.position = player.position + cameraOffset2D;
         transform.rotation = Quaternion.Euler(cameraRotation2D);
+    }
+
+    private void FollowPlayer()
+    {
+        transform.LookAt(player);
+    }
+
+    public void LockCamera()
+    {
+        isCameraLocked = true;
     }
 
     private void Apply3DView()

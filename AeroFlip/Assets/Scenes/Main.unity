@@ -401,6 +401,106 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!1 &514009902
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 514009907}
+  - component: {fileID: 514009906}
+  - component: {fileID: 514009905}
+  - component: {fileID: 514009904}
+  - component: {fileID: 514009903}
+  m_Layer: 0
+  m_Name: Missile
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &514009903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 514009902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 920bec99a880ec04ab3b0e20dc4865e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MissileWarningPool
+  warningPrefab: {fileID: 0}
+  initialPoolSize: 40
+--- !u!114 &514009904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 514009902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0178e59f0d7e206418fb488aee36dfa8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MissileWarning
+  warningImage: {fileID: 0}
+  warningDuration: 2
+  blinkInterval: 0.2
+--- !u!114 &514009905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 514009902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ba3fdcaf0e2448429a05c2a48a192bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MissileSpawner
+  missilePool: {fileID: 514009906}
+  warningPool: {fileID: 514009903}
+  minSpawnInterval: 0.2
+  maxSpawnInterval: 2
+  minMissileCount: 1
+  maxMissileCount: 4
+  spawnWidth: 184
+  spawnHeight: 103
+  spawnDistance: 20
+  warningDuration: 2
+--- !u!114 &514009906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 514009902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7d18b01e3c41a3479a351794b0ee7fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MissilePool
+  missilePrefab: {fileID: 6730995445248549321, guid: 45ecb96c8affc394c8de229c87b71e69, type: 3}
+  initialPoolSize: 20
+--- !u!4 &514009907
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 514009902}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &576024881
 GameObject:
   m_ObjectHideFlags: 0
@@ -432,7 +532,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   worldMoveMent: {fileID: 774914384}
   scoreManager: {fileID: 1397169578}
-  missileSpawner: {fileID: 774914386}
+  missileSpawner: {fileID: 0}
 --- !u!4 &576024883
 Transform:
   m_ObjectHideFlags: 0
@@ -460,8 +560,6 @@ GameObject:
   - component: {fileID: 774914389}
   - component: {fileID: 774914388}
   - component: {fileID: 774914385}
-  - component: {fileID: 774914387}
-  - component: {fileID: 774914386}
   - component: {fileID: 774914384}
   m_Layer: 0
   m_Name: World
@@ -497,42 +595,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WallPool
   wallPrefab: {fileID: 1578066316762817833, guid: cb84d3baeb73cc243b66891b42c8fec2, type: 3}
---- !u!114 &774914386
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 774914383}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ba3fdcaf0e2448429a05c2a48a192bc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MissileSpawner
-  missilePool: {fileID: 774914387}
-  warningPool: {fileID: 0}
-  minSpawnInterval: 0.2
-  maxSpawnInterval: 2
-  minMissileCount: 1
-  maxMissileCount: 4
-  spawnWidth: 184
-  spawnHeight: 103
-  spawnDistance: 20
-  warningDuration: 2
---- !u!114 &774914387
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 774914383}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7d18b01e3c41a3479a351794b0ee7fc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MissilePool
-  missilePrefab: {fileID: 6730995445248549321, guid: 45ecb96c8affc394c8de229c87b71e69, type: 3}
-  initialPoolSize: 20
 --- !u!114 &774914388
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -676,6 +738,7 @@ MonoBehaviour:
   playerMode: {fileID: 6349540993517378988}
   scoreManager: {fileID: 1397169578}
   mapManager: {fileID: 774914389}
+  missileSpawner: {fileID: 514009905}
 --- !u!4 &1187783837
 Transform:
   m_ObjectHideFlags: 0
@@ -925,7 +988,6 @@ GameObject:
   - component: {fileID: 6349540993517378987}
   - component: {fileID: 94626385517964441}
   - component: {fileID: 1997285555691656787}
-  - component: {fileID: 6349540993517378991}
   - component: {fileID: 6349540993517378988}
   - component: {fileID: 6349540993517378989}
   - component: {fileID: 6349540993517378990}
@@ -978,8 +1040,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8aa65cfda1e69f4f8f636cce4e37f08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerTransitionMovement
-  centerMoveDuration: 1
-  transitionHeight: 100
+  transitionHeight: 150
   transitionDuration: 1.5
   riseRotationX: -70
   diveRotationX: 70
@@ -998,24 +1059,6 @@ MonoBehaviour:
   playerMode: {fileID: 6349540993517378988}
   dimensionTransition: {fileID: 1187783836}
   playerInput: {fileID: 6349540993517378992}
---- !u!114 &6349540993517378991
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4671372671951975989}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07e076d3a20fdb84ead87a39a6527183, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DimensionTransition
-  playerController: {fileID: 6349540993517378990}
-  transitionMovement: {fileID: 6349540993517378989}
-  cameraController: {fileID: 330585548}
-  playerMode: {fileID: 6349540993517378988}
-  scoreManager: {fileID: 1397169578}
-  mapManager: {fileID: 774914389}
 --- !u!114 &6349540993517378992
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1101,3 +1144,4 @@ SceneRoots:
   - {fileID: 1187783837}
   - {fileID: 1397169579}
   - {fileID: 2136318222}
+  - {fileID: 514009907}

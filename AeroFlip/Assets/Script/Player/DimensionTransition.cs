@@ -9,6 +9,7 @@ public class DimensionTransition : MonoBehaviour
     [SerializeField] PlayerMode playerMode;
     [SerializeField] ScoreManager scoreManager;
     [SerializeField] MapManager mapManager;
+    [SerializeField] MissileSpawner missileSpawner;
 
     private bool isTransitioning;
     private float transitionMapEndZ;
@@ -22,29 +23,61 @@ public class DimensionTransition : MonoBehaviour
         StartCoroutine(TransitionTo2DSequence());
     }
 
+    public void TransitionTo3D()
+    {
+        if (isTransitioning || playerMode == null || !playerMode.IsMode2D()) return;
+        StartCoroutine(TransitionTo3DSequence());
+    }
+
     private IEnumerator TransitionTo2DSequence()
     {
         isTransitioning = true;
-        cameraController.SetTransitioning(true);
-
-        transitionMapEndZ = mapManager.SpawnTransitionSafeMaps();
+        mapManager.SpawnTransitionSafeMaps();
 
         yield return WaitForTransitionMap();
 
-        yield return transitionMovement.MoveToCenter();
+        yield return new WaitForSeconds(2f);
 
+        playerController.SetControlEnabled(false);
+
+        cameraController.LockCamera();
 
         scoreManager.StopScoring();
         yield return transitionMovement.Rise();
 
+        mapManager.HideMaps();
+
         cameraController.Set2DView();
         playerMode.SetMode(PlayerModes.Mode2D);
-        playerController.Set3DInput();
+        playerController.Set2DInput();
 
-
-        cameraController.SetTransitioning(false);
         scoreManager.StartScoring();
         playerController.SetControlEnabled(true);
+
+        mapManager.EndTransitionMap();
+        isTransitioning = false;
+        
+    }
+
+    private IEnumerator TransitionTo3DSequence()
+    {
+        isTransitioning = true;
+        playerController.SetControlEnabled(false);
+        scoreManager.StopScoring();
+
+        yield return missileSpawner.SpawnTransitionPattern();
+
+        yield return transitionMovement.Dive();
+
+        mapManager.ResetMaps();
+
+        cameraController.Set3DView();
+        playerMode.SetMode(PlayerModes.Mode3D);
+        playerController.Set3DInput();
+
+        scoreManager.StartScoring();
+        playerController.SetControlEnabled(true);
+
         isTransitioning = false;
     }
 
@@ -52,7 +85,5 @@ public class DimensionTransition : MonoBehaviour
     {
         while(!mapManager.IsTransitionMapArrived(transitionMapEndZ))
             yield return null;
-
-        playerController.SetControlEnabled(false);
     }
 }

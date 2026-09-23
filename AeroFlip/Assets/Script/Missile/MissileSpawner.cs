@@ -47,6 +47,14 @@ public class MissileSpawner : MonoBehaviour
             ResetSpawner();
     }
 
+    public void StopSpawning()
+    {
+        StopAllCoroutines();
+        enabled = false;
+        warningPool.ReturnAllWarnings();
+        missilePool.ReturnAllMissiles();
+    }
+
     private void SetNextSpawnTime()
     {
         nextSpawnTime = Random.Range(minSpawnInterval, maxSpawnInterval);
@@ -156,6 +164,58 @@ public class MissileSpawner : MonoBehaviour
         SetNextSpawnTime();
     }
 
+    public IEnumerator SpawnTransitionPattern()
+    {
+        StopSpawning();
+
+        for(int i = 0; i < 4; i++)
+        {
+            Vector3 direction;
+
+            switch (i)
+            {
+                case 0:direction = Vector3.back; break;
+                case 1: direction = Vector3.forward; break;
+                case 2:direction = Vector3.left; break;
+                default: direction = Vector3.right; break;
+            }
+
+            SpawnTransitionMissiles(direction);
+        }
+
+        yield return new WaitForSeconds(GetTransitionPatternDuration());
+        missilePool.ReturnAllMissiles();
+    }
+
+    private void SpawnTransitionMissiles(Vector3 direction)
+    {
+        for (int i = 0; i < maxMissileCount; i++)
+        {
+            GameObject missileObject = missilePool.GetMissile();
+
+            if (missileObject == null)
+                continue;
+
+            Vector3 spawnPosition = GetSpawnPosition(direction);
+            float travelDistance = GetTravelDistance(direction);
+
+            missileObject.transform.SetPositionAndRotation(spawnPosition, Quaternion.identity);
+
+            Missile missile = missileObject.GetComponent<Missile>();
+
+            if (missile != null)
+                missile.Initialize(missilePool, direction, travelDistance);
+        }
+    }
+
+    private float GetTransitionPatternDuration()
+    {
+        float horizontalTime = (spawnWidth + spawnDistance * 2f) / 20f;
+        float verticalTime = (spawnHeight + spawnDistance * 2f) / 20f;
+
+        return Mathf.Max(horizontalTime, verticalTime);
+    }
+
     private Vector2 GetWarningScreenPosition(Vector3 spawnPosition, Vector3 direction)
     {
         Vector3 center = transform.position;
@@ -187,4 +247,6 @@ public class MissileSpawner : MonoBehaviour
 
         return screenPosition;
     }
+
+
 }
