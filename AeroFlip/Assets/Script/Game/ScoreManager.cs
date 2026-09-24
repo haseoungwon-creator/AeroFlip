@@ -20,7 +20,7 @@ public class ScoreManager : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(CurrentScore);
+       // Debug.Log(CurrentScore);
 
         if (!scoringEnabled || worldMovement == null)
             return;

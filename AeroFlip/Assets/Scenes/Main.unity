@@ -992,6 +992,8 @@ GameObject:
   - component: {fileID: 6349540993517378989}
   - component: {fileID: 6349540993517378990}
   - component: {fileID: 6349540993517378992}
+  - component: {fileID: 6349540993517378995}
+  - component: {fileID: 6349540993517378993}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1008,7 +1010,7 @@ Transform:
   m_GameObject: {fileID: 4671372671951975989}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 10, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1059,6 +1061,8 @@ MonoBehaviour:
   playerMode: {fileID: 6349540993517378988}
   dimensionTransition: {fileID: 1187783836}
   playerInput: {fileID: 6349540993517378992}
+  playerMovement3D: {fileID: 6349540993517378993}
+  playerMovement2D: {fileID: 6349540993517378995}
 --- !u!114 &6349540993517378992
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1085,11 +1089,35 @@ MonoBehaviour:
       m_Calls: []
   m_ActionEvents:
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6349540993517378990}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnMousePosition
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: b7a0e447-42c8-4ffd-82fb-9fb364f834bc
     m_ActionName: 'Player3D/Mouse[/Mouse/position,/Mouse/delta]'
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6349540993517378990}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnMove
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 5af13c01-4eca-434b-971b-3cb9cc23e58c
     m_ActionName: 'Player2D/Move[/Keyboard/anyKey]'
   - m_PersistentCalls:
@@ -1108,11 +1136,71 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 7aa857ec-2d52-4b1e-b65f-c40f68a7b410
     m_ActionName: 'System/Shift[/Keyboard/leftShift]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6349540993517378990}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnMouseClick
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: f549d287-b283-4e55-9589-4646e21e3635
+    m_ActionName: 'Player3D/MouseClick[/Mouse/leftButton]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player3D
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &6349540993517378993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4671372671951975989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3b08d89544c48844b1763d93b6a9ed8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement3D
+  moveSpeed: 25
+  verticalMultiplier: 2
+  moveSmooth: 15
+  clickMoveMultiplier: 0.2
+  minX: -40
+  maxX: 40
+  minY: 3
+  maxY: 50
+  maxPitch: 10
+  maxRoll: 18
+  clickMaxRoll: 130
+  rotationSmooth: 5
+  inputSensitivity: 1.5
+  inputSmooth: 8
+--- !u!114 &6349540993517378995
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4671372671951975989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d90b54ef9606b6748b7d851e6fb45fbc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement2D
+  moveSpeed: 100
+  moveSmooth: 15
+  minX: -160
+  maxX: 160
+  minZ: -84
+  maxZ: 84
 --- !u!1 &8234775977706158400
 GameObject:
   m_ObjectHideFlags: 0

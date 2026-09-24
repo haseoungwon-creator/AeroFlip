@@ -48,7 +48,7 @@ public class CameraController : MonoBehaviour
 
     private void Update2DCamera()
     {
-        transform.position = player.position + cameraOffset2D;
+        transform.position = new Vector3(0, 90, 0);
         transform.rotation = Quaternion.Euler(cameraRotation2D);
     }
 
@@ -70,7 +70,7 @@ public class CameraController : MonoBehaviour
 
     private void Apply2DView()
     {
-        transform.position = player.position + cameraOffset2D;
+        transform.position = new Vector3(0, 90, 0);
         transform.rotation = Quaternion.Euler(cameraRotation2D);
     }
 }

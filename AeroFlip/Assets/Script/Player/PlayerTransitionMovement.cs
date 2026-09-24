@@ -37,6 +37,7 @@ public class PlayerTransitionMovement : MonoBehaviour
         transform.rotation = Quaternion.Euler(0,0,0);
 
         Istransitioning = false;
+        transform.position = new Vector3(0, 10, 0);
     }
 
     public IEnumerator Dive()
@@ -70,8 +71,4 @@ public class PlayerTransitionMovement : MonoBehaviour
         Istransitioning = false;
     }
     
-    public void SetPlayer()
-    {
-        transform.position = new Vector3(0,10,0);
-    }
 }
