@@ -5,10 +5,10 @@ public class PlayerMovement2D : MonoBehaviour
 {
     [SerializeField] float moveSpeed = 50f;
     [SerializeField] float moveSmooth = 15f;
-    [SerializeField] float minX = -160f;
-    [SerializeField] float maxX = 160f;
-    [SerializeField] float minZ = -84f;
-    [SerializeField] float maxZ = 84f;
+    [SerializeField] float minX = -74f;
+    [SerializeField] float maxX = 74f;
+    [SerializeField] float minZ = -35f;
+    [SerializeField] float maxZ = 35f;
 
     private Transform _t;
     private Vector2 currentInput;

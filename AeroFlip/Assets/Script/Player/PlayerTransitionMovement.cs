@@ -42,6 +42,7 @@ public class PlayerTransitionMovement : MonoBehaviour
 
     public IEnumerator Dive()
     {
+        Debug.Log("Dive Start");
         Istransitioning = true;
 
         Vector3 startPosition = transform.position;

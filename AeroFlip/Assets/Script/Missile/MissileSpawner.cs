@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 
@@ -5,17 +6,20 @@ public class MissileSpawner : MonoBehaviour
 {
     [SerializeField] MissilePool missilePool;
     [SerializeField] MissileWarningPool warningPool;
-    [SerializeField] float minSpawnInterval = 0.2f;
-    [SerializeField] float maxSpawnInterval = 2f;
+    [SerializeField] float minSpawnInterval = 2f;
+    [SerializeField] float maxSpawnInterval = 4f;
     [SerializeField] int minMissileCount = 1;
-    [SerializeField] int maxMissileCount = 4;
-    [SerializeField] float spawnWidth = 184f;
-    [SerializeField] float spawnHeight = 103f;
+    [SerializeField] int maxMissileCount = 3;
+    [SerializeField] float spawnWidth = 80f;
+    [SerializeField] float spawnHeight = 45f;
     [SerializeField] float spawnDistance = 20f;
     [SerializeField] float warningDuration = 2f;
 
     private float spawnTimer;
     private float nextSpawnTime;
+
+    private List<Vector3> transitionSpawnPositions = new List<Vector3>();
+    private List<Vector3> transitionDirections = new List<Vector3>();
 
     private void Awake()
     {
@@ -100,7 +104,7 @@ public class MissileSpawner : MonoBehaviour
         {
             float travelDistance = GetTravelDistance(direction);
 
-            missileObject.transform.SetPositionAndRotation(spawnPosition, Quaternion.identity);
+            missileObject.transform.SetPositionAndRotation(spawnPosition, Quaternion.FromToRotation(Vector3.up, direction));
 
             Missile missile = missileObject.GetComponent<Missile>();
             missile.Initialize(missilePool, direction, travelDistance);
@@ -166,40 +170,85 @@ public class MissileSpawner : MonoBehaviour
 
     public IEnumerator SpawnTransitionPattern()
     {
-        StopSpawning();
+        enabled = false;
 
-        for(int i = 0; i < 4; i++)
+        transitionSpawnPositions.Clear();
+        transitionDirections.Clear();
+
+        yield return WaitForAllMissilesReturned();
+
+        for (int i = 0; i < 4; i++)
         {
             Vector3 direction;
 
             switch (i)
             {
-                case 0:direction = Vector3.back; break;
+                case 0: direction = Vector3.back; break;
                 case 1: direction = Vector3.forward; break;
-                case 2:direction = Vector3.left; break;
+                case 2: direction = Vector3.left; break;
                 default: direction = Vector3.right; break;
             }
 
-            SpawnTransitionMissiles(direction);
+            SpawnTransitionWarnings(direction);
         }
 
-        yield return new WaitForSeconds(GetTransitionPatternDuration());
-        missilePool.ReturnAllMissiles();
+        yield return new WaitForSeconds(warningDuration);
+
+        SpawnTransitionMissiles();
+    }
+    private void SpawnTransitionWarnings(Vector3 direction)
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            Vector3 spawnPosition = GetSpawnPosition(direction);
+
+            transitionSpawnPositions.Add(spawnPosition);
+            transitionDirections.Add(direction);
+
+            GameObject warningObject = warningPool.GetWarning();
+
+            if (warningObject == null)
+                continue;
+
+            MissileWarning warning = warningObject.GetComponent<MissileWarning>();
+
+            if (warning == null)
+            {
+                warningPool.ReturnWarning(warningObject);
+                continue;
+            }
+
+            warning.Initialize(warningPool);
+
+            Vector2 screenPosition = GetWarningScreenPosition(spawnPosition, direction);
+            warning.Show(screenPosition, direction);
+        }
     }
 
-    private void SpawnTransitionMissiles(Vector3 direction)
+    private IEnumerator WaitForAllMissilesReturned()
     {
-        for (int i = 0; i < maxMissileCount; i++)
+        while (missilePool.HasActiveMissiles())
+        {
+            yield return null;
+        }
+    }
+
+    private void SpawnTransitionMissiles()
+    {
+        for (int i = 0; i < transitionSpawnPositions.Count; i++)
         {
             GameObject missileObject = missilePool.GetMissile();
 
             if (missileObject == null)
                 continue;
 
-            Vector3 spawnPosition = GetSpawnPosition(direction);
+            Vector3 spawnPosition = transitionSpawnPositions[i];
+            Vector3 direction = transitionDirections[i];
             float travelDistance = GetTravelDistance(direction);
 
-            missileObject.transform.SetPositionAndRotation(spawnPosition, Quaternion.identity);
+            missileObject.transform.SetPositionAndRotation(
+                spawnPosition,
+                Quaternion.FromToRotation(Vector3.up, direction));
 
             Missile missile = missileObject.GetComponent<Missile>();
 

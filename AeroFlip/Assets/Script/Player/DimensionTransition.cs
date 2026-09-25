@@ -54,6 +54,8 @@ public class DimensionTransition : MonoBehaviour
         scoreManager.StartScoring();
         playerController.SetControlEnabled(true);
 
+        missileSpawner.SetSpawning(true);
+
         mapManager.EndTransitionMap();
         isTransitioning = false;
         
@@ -62,7 +64,7 @@ public class DimensionTransition : MonoBehaviour
     private IEnumerator TransitionTo3DSequence()
     {
         isTransitioning = true;
-        playerController.SetControlEnabled(false);
+
         scoreManager.StopScoring();
 
         yield return missileSpawner.SpawnTransitionPattern();
@@ -76,7 +78,6 @@ public class DimensionTransition : MonoBehaviour
         playerController.Set3DInput();
 
         scoreManager.StartScoring();
-        playerController.SetControlEnabled(true);
 
         isTransitioning = false;
     }

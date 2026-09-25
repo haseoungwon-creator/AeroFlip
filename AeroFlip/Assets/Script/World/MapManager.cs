@@ -99,7 +99,7 @@ public class MapManager : MonoBehaviour
             rotation = Quaternion.Euler(0f,rotationY, 0f);
         }
 
-        map.transform.SetPositionAndRotation(new Vector3(0f, 0f, spawnZ), rotation);
+        map.transform.SetPositionAndRotation(new Vector3(0f, 0f, spawnZ - 40f), rotation);
 
         spawnedMaps.Enqueue(new SpawnedMap(map,mapIndex, isSafe));
         farthestMap = map;
@@ -162,6 +162,8 @@ public class MapManager : MonoBehaviour
         farthestMap = null;
         mapCount = 0;
         transitionWallZ = 0f;
+        isTransitionMapActive = false;
+        is3DMapActive = true;
     }
 
     public void HideMaps()

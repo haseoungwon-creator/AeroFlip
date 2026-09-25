@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Missile : MonoBehaviour
 {
-    [SerializeField] float speed = 20f;
+    [SerializeField] float speed = 100f;
 
     private MissilePool missilePool;
     private Vector3 direction;
@@ -20,10 +20,10 @@ public class Missile : MonoBehaviour
     private void Update()
     {
         float moveDistance = speed * Time.deltaTime;
-        transform.position += direction * movedDistance;
-        moveDistance += moveDistance;
+        transform.position += direction * moveDistance;
+        movedDistance += moveDistance;
 
-        if(moveDistance >= travelDistance)
+        if(movedDistance >= travelDistance)
             ReturnToPool();
     }
 

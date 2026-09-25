@@ -4,7 +4,7 @@ using UnityEngine;
 public class MissilePool : MonoBehaviour
 {
     [SerializeField] GameObject missilePrefab;
-    [SerializeField] int initialPoolSize = 20;
+    [SerializeField] int initialPoolSize = 30;
 
     private readonly Queue<GameObject> missilePool = new Queue<GameObject>();
     private readonly HashSet<GameObject> activeMissiles = new HashSet<GameObject>();
@@ -55,5 +55,10 @@ public class MissilePool : MonoBehaviour
             missilePool.Enqueue(missile);
         }
         activeMissiles.Clear();
+    }
+
+    public bool HasActiveMissiles()
+    {
+        return activeMissiles.Count > 0;
     }
 }
