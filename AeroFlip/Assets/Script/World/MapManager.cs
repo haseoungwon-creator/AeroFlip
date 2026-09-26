@@ -61,12 +61,18 @@ public class MapManager : MonoBehaviour
     private void SpawnMapsAhead()
     {
         float requiredZ = player.position.z + mapLength * forwardMapCount;
-        float forthestZ = Mathf.Max(GetFarthestZ(), transitionWallZ);
+        float forthestZ = farthestMap != null ? farthestMap.transform.position.z : -mapLength;
+        forthestZ = Mathf.Max(forthestZ, transitionWallZ);
+
         int guard = 0;
 
         while (forthestZ < requiredZ)
         {
             float spawnZ = forthestZ + mapLength;
+
+            if (farthestMap == null)
+                spawnZ = 0f;
+
             if (!SpawnMap(spawnZ))
                 break;
 
@@ -79,7 +85,7 @@ public class MapManager : MonoBehaviour
 
     private float GetFarthestZ()
     {
-        return farthestMap != null ? farthestMap.transform.position.z : player.position.z - mapLength;
+        return farthestMap != null ? farthestMap.transform.position.z : 0f;
     }
 
     private bool SpawnMap(float spawnZ)
@@ -99,7 +105,7 @@ public class MapManager : MonoBehaviour
             rotation = Quaternion.Euler(0f,rotationY, 0f);
         }
 
-        map.transform.SetPositionAndRotation(new Vector3(0f, 0f, spawnZ - 40f), rotation);
+        map.transform.SetPositionAndRotation(new Vector3(0f, 0f, spawnZ), rotation);
 
         spawnedMaps.Enqueue(new SpawnedMap(map,mapIndex, isSafe));
         farthestMap = map;

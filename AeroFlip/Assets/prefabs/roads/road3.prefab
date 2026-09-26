@@ -110,7 +110,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.0274276, y: 1.397608, z: 1.0250072}
+  m_Size: {x: 1.0274276, y: 1.4, z: 1.0250072}
   m_Center: {x: 0.017609296, y: 0.13501725, z: 0.029834121}
 --- !u!1 &3163139455560374980
 GameObject:
@@ -159,7 +159,7 @@ GameObject:
   - component: {fileID: 4944807917368450938}
   - component: {fileID: 8423422298751215675}
   - component: {fileID: 3021754581893780800}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}

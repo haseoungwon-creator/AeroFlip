@@ -15,6 +15,9 @@ public class DimensionTransition : MonoBehaviour
     private float transitionMapEndZ;
 
     public bool IsTransitioning => isTransitioning;
+    [SerializeField] float riseDelay = 2f;
+    [SerializeField] float baseWorldSpeed = 30f;
+    [SerializeField] WorldMovement worldMovement;
 
     public void TransitionTo2D()
     {
@@ -36,7 +39,8 @@ public class DimensionTransition : MonoBehaviour
 
         yield return WaitForTransitionMap();
 
-        yield return new WaitForSeconds(2f);
+        float delay = riseDelay * baseWorldSpeed / worldMovement.CurrentSpeed-1f;
+        yield return new WaitForSeconds(delay);
 
         playerController.SetControlEnabled(false);
 

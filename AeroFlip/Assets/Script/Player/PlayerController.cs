@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] PlayerInput playerInput;
     [SerializeField] PlayerMovement3D playerMovement3D;
     [SerializeField] PlayerMovement2D playerMovement2D;
+    [SerializeField] Rigidbody rb;
 
     private bool canControl = true;
 
@@ -55,6 +56,37 @@ public class PlayerController : MonoBehaviour
             return;
 
         playerMovement2D.OnMove(context);
+    }
+
+    public void ResetPlayer()
+    {
+        playerInput.actions.FindActionMap("Player3D").Enable();
+        playerInput.actions.FindActionMap("Player2D").Disable();
+
+        playerMode.SetMode(PlayerModes.Mode3D);
+
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+
+        transform.SetPositionAndRotation(
+            new Vector3(0f, 10f, 0f),
+            Quaternion.identity);
+
+        playerMovement2D.SetControlEnabled(false);
+        playerMovement3D.SetControlEnabled(false);
+
+        canControl = false;
+    }
+
+    public void StopPlayer()
+    {
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+
+        playerMovement3D.SetControlEnabled(false);
+        playerMovement2D.SetControlEnabled(false);
+
+        canControl = false;
     }
 
     public void SetControlEnabled(bool value)

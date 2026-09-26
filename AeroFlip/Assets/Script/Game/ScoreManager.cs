@@ -47,6 +47,8 @@ public class ScoreManager : MonoBehaviour
 
         CurrentScore += nearMissScore;
         UpdateHighScore();
+
+        Debug.Log($"Near Miss! +{nearMissScore}점 / 현재 점수: {CurrentScore}");
     }
 
     public void StartScoring()
