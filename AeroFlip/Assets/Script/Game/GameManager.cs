@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] CameraController cameraController;
     [SerializeField] MapManager mapManager;
     [SerializeField] NearMissDetector nearMissDetector;
+    [SerializeField] PlayerRewind playerRewind;
 
     public GameStates CurrentState { get; private set; }
 
@@ -50,7 +51,7 @@ public class GameManager : MonoBehaviour
         gameUI.HideAll();
         playerController.SetControlEnabled(false);
 
-        yield return cameraController.MoveToStartGamePosition();
+        yield return cameraController.MoveToGamePosition();
 
         SetGameState(GameStates.Playing);
     }
@@ -87,11 +88,12 @@ public class GameManager : MonoBehaviour
                 break;
 
             case GameStates.GameOver:
-                playerController.StopPlayer();
+                
                 worldMoveMent.SetMovement(false);
                 scoreManager.StopScoring();
                 missileSpawner.SetSpawning(false);
                 scoreManager.SaveHighScore();
+                playerController.StopPlayer();
                 gameUI.ShowGameOverPanel();
                 break;
         }
@@ -104,6 +106,7 @@ public class GameManager : MonoBehaviour
         scoreManager.ResetScore();
         SetGameState(GameStates.Ready);
         playerController.ResetPlayer();
+        playerRewind.ResetRewind();
 
         nearMissDetector.ResetDetector();
 

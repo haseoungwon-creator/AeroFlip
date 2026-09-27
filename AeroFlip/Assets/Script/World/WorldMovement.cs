@@ -8,7 +8,8 @@ public class WorldMovement : MonoBehaviour
     [SerializeField] float speedIncreaseInterval = 10f;
     [SerializeField] bool canMove;
 
-    public float CurrentSpeed => worldSpeed;
+    public float CurrentSpeed => currentSpeed;
+    public bool IsRewinding { get; private set; }
 
     private float currentSpeed;
     private float speedTimer;
@@ -20,7 +21,7 @@ public class WorldMovement : MonoBehaviour
 
     private void Update()
     {
-        if (!canMove)
+        if (!canMove || IsRewinding)
             return;
 
         transform.position += Vector3.back * currentSpeed * Time.deltaTime;
@@ -30,9 +31,10 @@ public class WorldMovement : MonoBehaviour
         if (speedTimer >= speedIncreaseInterval)
         {
             speedTimer = 0f;
-            currentSpeed = Mathf.Min(currentSpeed + speedIncrease, maxWorldSpeed);
 
-            Debug.Log($"World Speed: {currentSpeed}");
+            currentSpeed = Mathf.Min(
+                currentSpeed + speedIncrease,
+                maxWorldSpeed);
         }
     }
 
@@ -41,10 +43,21 @@ public class WorldMovement : MonoBehaviour
         canMove = value;
     }
 
+    public void SetRewinding(bool value)
+    {
+        IsRewinding = value;
+    }
+
+    public void SetSpeed(float speed)
+    {
+        currentSpeed = speed;
+    }
+
     public void ResetPosition()
     {
         transform.position = Vector3.zero;
         currentSpeed = worldSpeed;
         speedTimer = 0f;
+        IsRewinding = false;
     }
 }

@@ -6,12 +6,15 @@ public class ScoreManager : MonoBehaviour
     [SerializeField] PlayerMode playerMode;
     [SerializeField] int nearMissScore = 5;
     [SerializeField] float distanceScoreMultiplier = 0.05f;
-    public int CurrentScore {  get; private set; }
-    public int HighScore {  get; private set; }
+
+    public int CurrentScore { get; private set; }
+    public int HighScore { get; private set; }
 
     private const string HighScoreKey = "HighScore";
+
     private float accumulatedDistance;
     private bool scoringEnabled;
+    private bool isRewinding;
 
     private void Awake()
     {
@@ -20,22 +23,29 @@ public class ScoreManager : MonoBehaviour
 
     private void Update()
     {
-       // Debug.Log(CurrentScore);
+        if (isRewinding)
+            return;
 
         if (!scoringEnabled || worldMovement == null)
             return;
-        AddDistanceScore(distanceScoreMultiplier * worldMovement.CurrentSpeed *  Time.deltaTime);
+
+        AddDistanceScore(
+            worldMovement.CurrentSpeed * Time.deltaTime);
     }
 
     private void AddDistanceScore(float distance)
     {
-        accumulatedDistance += distance;
+        accumulatedDistance +=
+            distance * distanceScoreMultiplier;
 
-        int score = Mathf.FloorToInt(accumulatedDistance);
+        int score =
+            Mathf.FloorToInt(accumulatedDistance);
 
-        if (score <= 0) return;
+        if (score <= 0)
+            return;
 
         accumulatedDistance -= score;
+
         CurrentScore += score;
 
         UpdateHighScore();
@@ -43,12 +53,22 @@ public class ScoreManager : MonoBehaviour
 
     public void AddNearMiss()
     {
-        if(!scoringEnabled || playerMode == null || !playerMode.Is3D()) return;
+        if (isRewinding)
+            return;
+
+        if (!scoringEnabled ||
+            playerMode == null ||
+            !playerMode.Is3D())
+            return;
 
         CurrentScore += nearMissScore;
-        UpdateHighScore();
 
-        Debug.Log($"Near Miss! +{nearMissScore}점 / 현재 점수: {CurrentScore}");
+        UpdateHighScore();
+    }
+
+    public void SetRewinding(bool value)
+    {
+        isRewinding = value;
     }
 
     public void StartScoring()
@@ -60,26 +80,33 @@ public class ScoreManager : MonoBehaviour
     {
         scoringEnabled = false;
     }
+
     public void ResetScore()
     {
         CurrentScore = 0;
-        accumulatedDistance = 0;
+        accumulatedDistance = 0f;
     }
 
     public void SaveHighScore()
     {
-        PlayerPrefs.SetInt(HighScoreKey, HighScore);
+        PlayerPrefs.SetInt(
+            HighScoreKey,
+            HighScore);
+
         PlayerPrefs.Save();
     }
 
     private void LoadHighScore()
     {
-        HighScore = PlayerPrefs.GetInt(HighScoreKey,0);
+        HighScore =
+            PlayerPrefs.GetInt(
+                HighScoreKey,
+                0);
     }
 
     private void UpdateHighScore()
     {
-        if(CurrentScore > HighScore)
+        if (CurrentScore > HighScore)
             HighScore = CurrentScore;
     }
 }

@@ -1,85 +1,79 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class NearMissDetector : MonoBehaviour
 {
     [SerializeField] ScoreManager scoreManager;
     [SerializeField] LayerMask obstacleLayer;
-    [SerializeField] float rayDistance = 20f;
-    [SerializeField] float nearMissThreshold = 3f;
+    [SerializeField] float detectDistance = 20f;
+    [SerializeField] float dangerDistance = 5f;
+    [SerializeField] int requiredDangerDirections = 2;
 
-    private readonly HashSet<Collider> nearMissCandidates = new HashSet<Collider>();
-    private readonly List<Collider> removeBuffer = new List<Collider>();
+    private bool isDangerous;
+    private bool wasDangerous;
+    private bool isRewinding;
 
     private void Update()
     {
+        if (isRewinding)
+            return;
+
         if (GameManager.Instance == null || GameManager.Instance.CurrentState != GameStates.Playing)
             return;
 
-        DetectObstacles();
-        CheckPassedObstacles();
+        CheckDanger();
     }
 
-    private void DetectObstacles()
+    public void SetRewinding(bool value)
+    {
+        isRewinding = value;
+
+        if (value)
+        {
+            isDangerous = false;
+            wasDangerous = false;
+        }
+    }
+
+    private void CheckDanger()
     {
         Vector3 position = transform.position;
 
-        CheckRay(position, Vector3.forward);
-        CheckRay(position, Vector3.up);
-        CheckRay(position, Vector3.down);
-        CheckRay(position, Vector3.left);
-        CheckRay(position, Vector3.right);
-    }
+        int dangerCount = 0;
 
-    private void CheckRay(Vector3 origin, Vector3 direction)
-    {
-        if (!Physics.Raycast(origin, direction, out RaycastHit hit, rayDistance, obstacleLayer))
-            return;
+        if (IsDangerous(position, Vector3.up))
+            dangerCount++;
 
-        Debug.Log($"[NearMiss 감지] {hit.collider.name} / 방향: {direction} / 거리: {hit.distance:F2}");
+        if (IsDangerous(position, Vector3.down))
+            dangerCount++;
 
-        nearMissCandidates.Add(hit.collider);
-    }
+        if (IsDangerous(position, Vector3.left))
+            dangerCount++;
 
-    private void CheckPassedObstacles()
-    {
-        if (nearMissCandidates.Count == 0)
-            return;
+        if (IsDangerous(position, Vector3.right))
+            dangerCount++;
 
-        removeBuffer.Clear();
+        wasDangerous = isDangerous;
+        isDangerous = dangerCount >= requiredDangerDirections;
 
-        foreach (Collider obstacle in nearMissCandidates)
+
+        if (wasDangerous && !isDangerous)
         {
-            if (obstacle == null)
-            {
-                removeBuffer.Add(obstacle);
-                continue;
-            }
-
-            if (obstacle.bounds.max.z < transform.position.z)
-            {
-                float distance = Vector3.Distance(
-                    obstacle.ClosestPoint(transform.position),
-                    transform.position);
-
-                if (distance <= nearMissThreshold)
-                {
-                    scoreManager.AddNearMiss();
-                    Debug.Log($"Near Miss! 거리: {distance:F2}");
-                }
-
-                removeBuffer.Add(obstacle);
-            }
+            scoreManager.AddNearMiss();
         }
+    }
 
-        foreach (Collider obstacle in removeBuffer)
-            nearMissCandidates.Remove(obstacle);
+    private bool IsDangerous(Vector3 origin, Vector3 direction)
+    {
+        if (!Physics.Raycast(origin, direction, out RaycastHit hit, detectDistance, obstacleLayer))
+            return false;
+
+        return hit.distance <= dangerDistance;
     }
 
     public void ResetDetector()
     {
-        nearMissCandidates.Clear();
-        removeBuffer.Clear();
+        isDangerous = false;
+        wasDangerous = false;
     }
 
     private void OnDrawGizmosSelected()
@@ -88,10 +82,16 @@ public class NearMissDetector : MonoBehaviour
 
         Vector3 position = transform.position;
 
-        Gizmos.DrawRay(position, Vector3.forward * rayDistance);
-        Gizmos.DrawRay(position, Vector3.up * rayDistance);
-        Gizmos.DrawRay(position, Vector3.down * rayDistance);
-        Gizmos.DrawRay(position, Vector3.left * rayDistance);
-        Gizmos.DrawRay(position, Vector3.right * rayDistance);
+        Gizmos.DrawRay(position, Vector3.up * detectDistance);
+        Gizmos.DrawRay(position, Vector3.down * detectDistance);
+        Gizmos.DrawRay(position, Vector3.left * detectDistance);
+        Gizmos.DrawRay(position, Vector3.right * detectDistance);
+
+        Gizmos.color = Color.red;
+
+        Gizmos.DrawRay(position, Vector3.up * dangerDistance);
+        Gizmos.DrawRay(position, Vector3.down * dangerDistance);
+        Gizmos.DrawRay(position, Vector3.left * dangerDistance);
+        Gizmos.DrawRay(position, Vector3.right * dangerDistance);
     }
 }

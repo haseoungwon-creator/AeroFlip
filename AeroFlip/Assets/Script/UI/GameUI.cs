@@ -4,22 +4,65 @@ public class GameUI : MonoBehaviour
 {
     [SerializeField] GameObject startPanel;
     [SerializeField] GameObject gameOverPanel;
+    [SerializeField] GameObject skinSelectPanel;
+    [SerializeField] GameObject skillSelectPanel;
 
     public void ShowStartPanel()
     {
-        startPanel.SetActive(true);
-        gameOverPanel.SetActive(false);
+        HideAll();
+
+        if (startPanel != null)
+            startPanel.SetActive(true);
     }
 
     public void ShowGameOverPanel()
     {
-        startPanel.SetActive(false);
-        gameOverPanel.SetActive(true);
+        HideAll();
+
+        if (gameOverPanel != null)
+            gameOverPanel.SetActive(true);
+    }
+
+    public void ShowSkinSelect()
+    {
+        HideAll();
+
+        if (skinSelectPanel != null)
+            skinSelectPanel.SetActive(true);
+    }
+
+    public void ShowSkillSelect()
+    {
+        HideAll();
+
+        if (skillSelectPanel != null)
+            skillSelectPanel.SetActive(true);
+    }
+
+    public void HideSkinSelect()
+    {
+        if (skinSelectPanel != null)
+            skinSelectPanel.SetActive(false);
+    }
+
+    public void HideSkillSelect()
+    {
+        if (skillSelectPanel != null)
+            skillSelectPanel.SetActive(false);
     }
 
     public void HideAll()
     {
-        startPanel.SetActive(false);
-        gameOverPanel.SetActive(false);
+        if (startPanel != null)
+            startPanel.SetActive(false);
+
+        if (gameOverPanel != null)
+            gameOverPanel.SetActive(false);
+
+        if (skinSelectPanel != null)
+            skinSelectPanel.SetActive(false);
+
+        if (skillSelectPanel != null)
+            skillSelectPanel.SetActive(false);
     }
 }

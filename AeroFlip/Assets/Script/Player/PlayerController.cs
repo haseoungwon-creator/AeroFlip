@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] PlayerMovement3D playerMovement3D;
     [SerializeField] PlayerMovement2D playerMovement2D;
     [SerializeField] Rigidbody rb;
+    [SerializeField] SkillManager skillManager;
 
     private bool canControl = true;
 
@@ -34,8 +35,6 @@ public class PlayerController : MonoBehaviour
 
     public void OnMousePosition(InputAction.CallbackContext context)
     {
-        Debug.Log($"PlayerController OnMousePosition / Phase: {context.phase}");
-
         if (!canControl || playerMode == null || !playerMode.Is3D())
             return;
 
@@ -48,6 +47,26 @@ public class PlayerController : MonoBehaviour
             return;
 
         playerMovement3D.OnMouseClick(context);
+    }
+
+    public void OnRewind(InputAction.CallbackContext context)
+    {
+        if (!context.performed)
+            return;
+
+        if (!canControl)
+            return;
+
+        if (GameManager.Instance == null)
+            return;
+
+        if (GameManager.Instance.CurrentState != GameStates.Playing)
+            return;
+
+        if (skillManager == null)
+            return;
+
+        skillManager.UseSkill();
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -99,10 +118,16 @@ public class PlayerController : MonoBehaviour
             playerMovement2D.SetControlEnabled(value);
     }
 
+    public void ResetMovementTarget()
+    {
+        playerMovement3D.ResetTargetPosition();
+    }
+
     public void Set3DInput()
     {
         playerInput.actions.FindActionMap("Player3D").Enable();
         playerInput.actions.FindActionMap("Player2D").Disable();
+
         playerMovement2D.SetControlEnabled(false);
         playerMovement3D.SetControlEnabled(true);
     }
@@ -111,6 +136,7 @@ public class PlayerController : MonoBehaviour
     {
         playerInput.actions.FindActionMap("Player3D").Disable();
         playerInput.actions.FindActionMap("Player2D").Enable();
+
         playerMovement3D.SetControlEnabled(false);
         playerMovement2D.SetControlEnabled(true);
     }

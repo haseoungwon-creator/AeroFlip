@@ -13,6 +13,7 @@ public class MapManager : MonoBehaviour
     [SerializeField] float keepBegindDistance = 250f;
     [SerializeField] WorldMovement worldMovement;
     [SerializeField] float wallDistance = 30f;
+    [SerializeField] PlayerRewind playerRewind;
 
 
     private float transitionWallZ;
@@ -50,10 +51,15 @@ public class MapManager : MonoBehaviour
 
     private void Update()
     {
-        if (!is3DMapActive) return;
-        if(!isTransitionMapActive)
+        if (!is3DMapActive)
+            return;
+
+        if (playerRewind != null && playerRewind.IsRewinding)
+            return;
+
+        if (!isTransitionMapActive)
             SpawnMapsAhead();
-        
+
         RemoveMapsBehind();
     }
 

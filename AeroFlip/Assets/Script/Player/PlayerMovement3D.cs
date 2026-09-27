@@ -51,22 +51,30 @@ public class PlayerMovement3D : MonoBehaviour
 
     public void OnMousePosition(InputAction.CallbackContext context)
     {
-        Debug.Log($"MousePosition »£√‚µ  / Phase: {context.phase} / Control: {canControl}");
-
         if (!canControl || !context.performed)
             return;
 
         Vector2 mousePosition = context.ReadValue<Vector2>();
-        Vector2 center = new Vector2(Screen.width * 0.5f, Screen.height * 0.5f);
+        Vector2 center = new Vector2(
+            Screen.width * 0.5f,
+            Screen.height * 0.5f);
 
         targetInput = new Vector2(
             (mousePosition.x - center.x) / center.x,
             (mousePosition.y - center.y) / center.y);
 
         targetInput *= inputSensitivity;
-        targetInput.x = Mathf.Clamp(targetInput.x, -1f, 1f);
-        targetInput.y = Mathf.Clamp(targetInput.y, -1f, 1f);
-    }                                                
+
+        targetInput.x = Mathf.Clamp(
+            targetInput.x,
+            -1f,
+            1f);
+
+        targetInput.y = Mathf.Clamp(
+            targetInput.y,
+            -1f,
+            1f);
+    }
 
     public void OnMouseClick(InputAction.CallbackContext context)
     {
@@ -83,7 +91,10 @@ public class PlayerMovement3D : MonoBehaviour
             targetInput,
             inputSmooth * Time.deltaTime);
 
-        rawMouseX = Mathf.Clamp(currentInput.x, -1f, 1f);
+        rawMouseX = Mathf.Clamp(
+            currentInput.x,
+            -1f,
+            1f);
     }
 
     private void Move()
@@ -100,16 +111,28 @@ public class PlayerMovement3D : MonoBehaviour
         if (up.sqrMagnitude > 0.001f)
             up.Normalize();
 
-        float moveMultiplier = clickHeld ? clickMoveMultiplier : 1f;
+        float moveMultiplier =
+            clickHeld ? clickMoveMultiplier : 1f;
 
         Vector3 movement =
             right * currentInput.x * verticalMultiplier +
             up * currentInput.y * verticalMultiplier;
 
-        targetPosition += movement * moveSpeed * moveMultiplier * Time.deltaTime;
+        targetPosition +=
+            movement *
+            moveSpeed *
+            moveMultiplier *
+            Time.deltaTime;
 
-        targetPosition.x = Mathf.Clamp(targetPosition.x, minX, maxX);
-        targetPosition.y = Mathf.Clamp(targetPosition.y, minY, maxY);
+        targetPosition.x = Mathf.Clamp(
+            targetPosition.x,
+            minX,
+            maxX);
+
+        targetPosition.y = Mathf.Clamp(
+            targetPosition.y,
+            minY,
+            maxY);
 
         _t.position = Vector3.Lerp(
             _t.position,
@@ -119,13 +142,17 @@ public class PlayerMovement3D : MonoBehaviour
 
     private void Rotate()
     {
-        float targetPitch = -currentInput.y * maxPitch;
-        float rollLimit = clickHeld ? clickMaxRoll : maxRoll;
+        float targetPitch =
+            -currentInput.y * maxPitch;
 
-        Quaternion targetRotation = Quaternion.Euler(
-            targetPitch,
-            0f,
-            -rawMouseX * rollLimit);
+        float rollLimit =
+            clickHeld ? clickMaxRoll : maxRoll;
+
+        Quaternion targetRotation =
+            Quaternion.Euler(
+                targetPitch,
+                0f,
+                -rawMouseX * rollLimit);
 
         _t.rotation = Quaternion.Slerp(
             _t.rotation,
@@ -139,6 +166,15 @@ public class PlayerMovement3D : MonoBehaviour
 
         if (!value)
             ResetMovement();
+    }
+
+    public void ResetTargetPosition()
+    {
+        targetPosition = _t.position;
+        currentInput = Vector2.zero;
+        targetInput = Vector2.zero;
+        rawMouseX = 0f;
+        clickHeld = false;
     }
 
     private void ResetMovement()

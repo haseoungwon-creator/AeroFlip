@@ -17,7 +17,7 @@ public class CameraController : MonoBehaviour
 
     private void Awake()
     {
-        transform.position = new Vector3(0f, 33.3f, -91.8f);
+        ResetCamera();
     }
 
     private void LateUpdate()
@@ -49,15 +49,21 @@ public class CameraController : MonoBehaviour
         is2D = false;
     }
 
-    public IEnumerator MoveToStartGamePosition()
+    public IEnumerator MoveToGamePosition()
     {
+        if (player == null)
+            yield break;
+
         isMoving = true;
 
         Vector3 startPosition = transform.position;
         Quaternion startRotation = transform.rotation;
 
-        Vector3 targetPosition = player.position + cameraOffset3D;
-        Quaternion targetRotation = Quaternion.Euler(cameraRotation3D);
+        Vector3 targetPosition =
+            player.position + cameraOffset3D;
+
+        Quaternion targetRotation =
+            Quaternion.Euler(cameraRotation3D);
 
         float elapsedTime = 0f;
 
@@ -65,19 +71,80 @@ public class CameraController : MonoBehaviour
         {
             elapsedTime += Time.deltaTime;
 
-            float t = elapsedTime / startMoveDuration;
+            float t =
+                Mathf.Clamp01(
+                    elapsedTime / startMoveDuration);
+
             t = Mathf.SmoothStep(0f, 1f, t);
 
-            transform.position = Vector3.Lerp(startPosition, targetPosition, t);
-            transform.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
+            transform.position =
+                Vector3.Lerp(
+                    startPosition,
+                    targetPosition,
+                    t);
+
+            transform.rotation =
+                Quaternion.Slerp(
+                    startRotation,
+                    targetRotation,
+                    t);
 
             yield return null;
         }
 
-        transform.position = targetPosition;
-        transform.rotation = targetRotation;
+        transform.SetPositionAndRotation(
+            targetPosition,
+            targetRotation);
 
         isStartPosition = false;
+        isMoving = false;
+    }
+
+    public IEnumerator MoveFromGamePosition()
+    {
+        isMoving = true;
+
+        Vector3 startPosition = transform.position;
+        Quaternion startRotation = transform.rotation;
+
+        Vector3 targetPosition =
+            new Vector3(0f, 33.3f, -91.8f);
+
+        Quaternion targetRotation =
+            Quaternion.identity;
+
+        float elapsedTime = 0f;
+
+        while (elapsedTime < startMoveDuration)
+        {
+            elapsedTime += Time.deltaTime;
+
+            float t =
+                Mathf.Clamp01(
+                    elapsedTime / startMoveDuration);
+
+            t = Mathf.SmoothStep(0f, 1f, t);
+
+            transform.position =
+                Vector3.Lerp(
+                    startPosition,
+                    targetPosition,
+                    t);
+
+            transform.rotation =
+                Quaternion.Slerp(
+                    startRotation,
+                    targetRotation,
+                    t);
+
+            yield return null;
+        }
+
+        transform.SetPositionAndRotation(
+            targetPosition,
+            targetRotation);
+
+        isStartPosition = true;
         isMoving = false;
     }
 
@@ -86,6 +153,7 @@ public class CameraController : MonoBehaviour
         is2D = false;
         isCameraLocked = false;
         isStartPosition = false;
+
         Apply3DView();
     }
 
@@ -94,19 +162,26 @@ public class CameraController : MonoBehaviour
         is2D = true;
         isCameraLocked = false;
         isStartPosition = false;
+
         Apply2DView();
     }
 
     private void Update3DCamera()
     {
-        transform.position = player.position + cameraOffset3D;
-        transform.rotation = Quaternion.Euler(cameraRotation3D);
+        transform.position =
+            player.position + cameraOffset3D;
+
+        transform.rotation =
+            Quaternion.Euler(cameraRotation3D);
     }
 
     private void Update2DCamera()
     {
-        transform.position = new Vector3(0f, 90f, 0f);
-        transform.rotation = Quaternion.Euler(cameraRotation2D);
+        transform.position =
+            new Vector3(0f, 90f, 0f);
+
+        transform.rotation =
+            Quaternion.Euler(cameraRotation2D);
     }
 
     private void FollowPlayer()
@@ -121,13 +196,19 @@ public class CameraController : MonoBehaviour
 
     private void Apply3DView()
     {
-        transform.position = player.position + cameraOffset3D;
-        transform.rotation = Quaternion.Euler(cameraRotation3D);
+        transform.position =
+            player.position + cameraOffset3D;
+
+        transform.rotation =
+            Quaternion.Euler(cameraRotation3D);
     }
 
     private void Apply2DView()
     {
-        transform.position = new Vector3(0f, 90f, 0f);
-        transform.rotation = Quaternion.Euler(cameraRotation2D);
+        transform.position =
+            new Vector3(0f, 90f, 0f);
+
+        transform.rotation =
+            Quaternion.Euler(cameraRotation2D);
     }
 }

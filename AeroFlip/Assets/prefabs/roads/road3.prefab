@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1868926184015879710}
   - component: {fileID: 3939145583348017919}
   - component: {fileID: 8726418326198982568}
-  - component: {fileID: 5586021068575000013}
+  - component: {fileID: 2790715649727369128}
   m_Layer: 0
   m_Name: ST_Stone5 (3)
   m_TagString: Untagged
@@ -91,8 +91,8 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &5586021068575000013
-BoxCollider:
+--- !u!64 &2790715649727369128
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -109,9 +109,10 @@ BoxCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.0274276, y: 1.4, z: 1.0250072}
-  m_Center: {x: 0.017609296, y: 0.13501725, z: 0.029834121}
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 5090787245838889048, guid: 079c048d0750a6341be30a2cc6a3cca2, type: 3}
 --- !u!1 &3163139455560374980
 GameObject:
   m_ObjectHideFlags: 0
@@ -390,5 +391,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.0274276, y: 1.397608, z: 1.0250072}
-  m_Center: {x: 0.017609177, y: 0.13501725, z: 0.029834121}
+  m_Size: {x: 0.91, y: 1.397608, z: 0.21}
+  m_Center: {x: 0.017609177, y: 0.13501725, z: -0.09}

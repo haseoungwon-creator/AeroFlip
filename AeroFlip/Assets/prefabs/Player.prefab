@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2375760212816542574}
   - component: {fileID: 2394298176600112154}
   - component: {fileID: 7902764458775228535}
+  - component: {fileID: 4178489688046926945}
   - component: {fileID: 7468196489185759329}
   - component: {fileID: 940202473483910773}
   - component: {fileID: 6159714886292212059}
@@ -133,6 +134,20 @@ MonoBehaviour:
   riseRotationX: -70
   diveRotationX: 70
   riseSpeedMultiplier: 1.5
+--- !u!114 &4178489688046926945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1853792731185276244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23414ad8179af1a47806df6c2483c83b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerRewind
+  rewindDuration: 5
+  recordInterval: 0.05
 --- !u!114 &7468196489185759329
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,6 +166,7 @@ MonoBehaviour:
   playerMovement3D: {fileID: 6694643769207503607}
   playerMovement2D: {fileID: 6159714886292212059}
   rb: {fileID: 513486875732545158}
+  playerRewind: {fileID: 4178489688046926945}
 --- !u!114 &940202473483910773
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -281,7 +297,7 @@ MonoBehaviour:
   clickMoveMultiplier: 0.2
   minX: -40
   maxX: 40
-  minY: 3
+  minY: 0
   maxY: 50
   maxPitch: 10
   maxRoll: 18
