@@ -44,7 +44,7 @@ public class MenuController : MonoBehaviour
     private IEnumerator CloseSkinSelectSequence()
     {
         if (skinPreviewController != null)
-            skinPreviewController.SetPreviewMode(false);
+            skinPreviewController.ResetPreview();
 
         if (gameUI != null)
             gameUI.HideSkinSelect();

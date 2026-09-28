@@ -3294,7 +3294,7 @@ MonoBehaviour:
   maxWorldSpeed: 60
   speedIncrease: 5
   speedIncreaseInterval: 10
-  canMove: 0
+  canMove: 1
 --- !u!114 &774914385
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3721,6 +3721,51 @@ MonoBehaviour:
   scoreManager: {fileID: 1397169578}
   scoreText: {fileID: 1588218512}
   highScoreText: {fileID: 735750094}
+--- !u!1 &904203619
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 904203621}
+  - component: {fileID: 904203620}
+  m_Layer: 0
+  m_Name: PerformanceMonitor1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &904203620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 904203619}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a4393e05c57fed4eb85bad71d37bb35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PerformanceMonitor1
+  measureDuration: 5
+--- !u!4 &904203621
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 904203619}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &922813165
 GameObject:
   m_ObjectHideFlags: 0
@@ -4794,9 +4839,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1217938054}
-        m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
-        m_MethodName: OpenSkinSelect
+      - m_Target: {fileID: 6349540993517379010}
+        m_TargetAssemblyTypeName: SkinPreviewController, Assembly-CSharp
+        m_MethodName: ConfirmSkin
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6467,3 +6512,4 @@ SceneRoots:
   - {fileID: 204601066}
   - {fileID: 1028732952}
   - {fileID: 754925574}
+  - {fileID: 904203621}
