@@ -10,6 +10,7 @@ public class DimensionTransition : MonoBehaviour
     [SerializeField] ScoreManager scoreManager;
     [SerializeField] MapManager mapManager;
     [SerializeField] MissileSpawner missileSpawner;
+    [SerializeField] CloudSpawner cloudSpawner;
 
     private bool isTransitioning;
     private float transitionMapEndZ;
@@ -62,7 +63,8 @@ public class DimensionTransition : MonoBehaviour
 
         mapManager.EndTransitionMap();
         isTransitioning = false;
-        
+        cloudSpawner.Set2DMode();
+
     }
 
     private IEnumerator TransitionTo3DSequence()
@@ -84,6 +86,7 @@ public class DimensionTransition : MonoBehaviour
         scoreManager.StartScoring();
 
         isTransitioning = false;
+        cloudSpawner.Set3DMode();
     }
 
     private IEnumerator WaitForTransitionMap()

@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] MapManager mapManager;
     [SerializeField] NearMissDetector nearMissDetector;
     [SerializeField] PlayerRewind playerRewind;
+    [SerializeField] GameOverUI gameOverUI;
+    [SerializeField] CloudSpawner cloudSpawner;
 
     public GameStates CurrentState { get; private set; }
 
@@ -95,11 +97,13 @@ public class GameManager : MonoBehaviour
                 scoreManager.SaveHighScore();
                 playerController.StopPlayer();
                 gameUI.ShowGameOverPanel();
+                gameOverUI.ShowScore();
                 break;
         }
     }
     public void RestartGame()
     {
+        cloudSpawner.Set3DMode();
         mapManager.ResetMaps();
         worldMoveMent.ResetPosition();
         cameraController.ResetCamera();
