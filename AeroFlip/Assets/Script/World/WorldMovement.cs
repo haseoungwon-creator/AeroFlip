@@ -21,8 +21,8 @@ public class WorldMovement : MonoBehaviour
 
     private void Update()
     {
-        if (!canMove || IsRewinding)
-            return;
+        //if (!canMove || IsRewinding)
+        //    return;
 
         transform.position += Vector3.back * currentSpeed * Time.deltaTime;
 
