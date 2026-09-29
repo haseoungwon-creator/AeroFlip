@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class ScoreManager : MonoBehaviour
@@ -9,6 +10,9 @@ public class ScoreManager : MonoBehaviour
 
     public int CurrentScore { get; private set; }
     public int HighScore { get; private set; }
+
+    public event Action<int> OnScoreChanged;
+    public event Action<int> OnHighScoreChanged;
 
     private const string HighScoreKey = "HighScore";
 
@@ -45,8 +49,9 @@ public class ScoreManager : MonoBehaviour
             return;
 
         accumulatedDistance -= score;
-
         CurrentScore += score;
+
+        OnScoreChanged?.Invoke(CurrentScore);
 
         UpdateHighScore();
     }
@@ -62,6 +67,8 @@ public class ScoreManager : MonoBehaviour
             return;
 
         CurrentScore += nearMissScore;
+
+        OnScoreChanged?.Invoke(CurrentScore);
 
         UpdateHighScore();
     }
@@ -85,6 +92,8 @@ public class ScoreManager : MonoBehaviour
     {
         CurrentScore = 0;
         accumulatedDistance = 0f;
+
+        OnScoreChanged?.Invoke(CurrentScore);
     }
 
     public void SaveHighScore()
@@ -106,7 +115,11 @@ public class ScoreManager : MonoBehaviour
 
     private void UpdateHighScore()
     {
-        if (CurrentScore > HighScore)
-            HighScore = CurrentScore;
+        if (CurrentScore <= HighScore)
+            return;
+
+        HighScore = CurrentScore;
+
+        OnHighScoreChanged?.Invoke(HighScore);
     }
 }
