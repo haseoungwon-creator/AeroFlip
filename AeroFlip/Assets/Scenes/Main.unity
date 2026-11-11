@@ -5273,7 +5273,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1570885297
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5281,19 +5281,22 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1570885296}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dc6f4be2f5d92e14bad6051ee6db2a7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AeroOptimizationExperiment
   saveSubfolder: ProfilerCaptures
   startAutomatically: 1
-  warmupSeconds: 5
+  warmupSeconds: 10
   captureSeconds: 30
   slowFrameThresholdMs: 40
   recordEveryAvailableMetric: 1
-  maxRecorders: 512
-  maxMetricBufferMiB: 192
+  maxRecorders: 128
+  maxMetricBufferMiB: 64
+  enableEditorDiagnostics: 0
+  capacityFramesPerSecond: 1000
+  settleAfterAllocationSeconds: 1
   frameTimingSampleEveryNFrames: 8
 --- !u!4 &1570885298
 Transform:
@@ -6195,11 +6198,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad57d613dc335fb4f93c6e0e47208aab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
---- !u!65 &6349540993517378996 stripped
-BoxCollider:
-  m_CorrespondingSourceObject: {fileID: 7471530741507688732, guid: cd49643a87086464889789802f5ee833, type: 3}
-  m_PrefabInstance: {fileID: 6593621555912193820}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &6349540993517379000 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4178489688046926945, guid: cd49643a87086464889789802f5ee833, type: 3}
@@ -6261,6 +6259,28 @@ MonoBehaviour:
   skillManager: {fileID: 204601065}
   rewindButton: {fileID: 311790793}
   timeSlowButton: {fileID: 586739508}
+--- !u!64 &6349540993517379019
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 124129165}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4150850542830065728, guid: b19c72af16de4a1479822acbd030a76f, type: 3}
 --- !u!1001 &6593621555912193820
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6368,7 +6388,7 @@ PrefabInstance:
     - target: {fileID: 4178489688046926945, guid: cd49643a87086464889789802f5ee833, type: 3}
       propertyPath: playerCollider
       value: 
-      objectReference: {fileID: 6349540993517378996}
+      objectReference: {fileID: 0}
     - target: {fileID: 4178489688046926945, guid: cd49643a87086464889789802f5ee833, type: 3}
       propertyPath: recordInterval
       value: 0.02
@@ -6418,6 +6438,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1853792731185276244, guid: cd49643a87086464889789802f5ee833, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6349540993517379011}
+    - targetCorrespondingSourceObject: {fileID: 1853792731185276244, guid: cd49643a87086464889789802f5ee833, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6349540993517379019}
   m_SourcePrefab: {fileID: 100100000, guid: cd49643a87086464889789802f5ee833, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
